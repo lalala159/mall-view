@@ -5,8 +5,18 @@
 </template>
 
 <script>
+    import {getMember} from "~/api/api";
+
     export default {
-        name: "Main"
+        name: "Main",
+        mounted() {
+            getMember().then((response) => {
+                var data = response
+                console.log(data);
+            })
+        },
+        methods: {
+        }
     }
 </script>
 

@@ -65,7 +65,7 @@ module.exports = (options = {}) => ({
         target: 'http://127.0.0.1:9527',
         changeOrigin: true,
 		pathRewrite: { 
-		      '^/api': 'http://127.0.0.1:9527' //路径重写 
+		      '^/api': 'http://127.0.0.1:9527' //路径重写
 		      } 
       }
     },

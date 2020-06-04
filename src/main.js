@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import {server} from './utils/http'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -16,8 +15,6 @@ Vue.use(VueRouter)
 Vue.use(ElementUI)
 
 Vue.use(VueAxios, axios)
-
-Vue.prototype.$server=server;
 
 
 

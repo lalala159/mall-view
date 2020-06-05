@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+// import './styles/index.css'
+// import './styles/style.scss'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -30,7 +32,6 @@ router.beforeEach((to, from, next) => {
         next()
     } else {
         let user = window.localStorage.getItem('access_token');
-		console.log(user);
         if (!user) {
             next({ path: '/login' })
         } else {

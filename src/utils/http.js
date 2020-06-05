@@ -14,11 +14,10 @@ const service = axios.create({
 // 添加一个请求拦截器
 service.interceptors.request.use(
     (config)=> {
-        // Do something before request is sent
-        // 获取tonken，一般是从本地获取
-        // if (store.getters.token) {
-        //   config.headers["token"] = getToken();
-        // }
+        const token = window.localStorage.getItem('access_token');
+        if(token != null){
+            config.headers['Authorization']= 'Bearer '+token
+        }
         return config;
     },
     function(error) {
@@ -35,7 +34,7 @@ service.interceptors.response.use(
     (error)=> {
         // Do something with response error
         // 提示错误信息
-        Message.error('账号或密码错误');
+        Message.error('请求失败');
         return Promise.reject(error);
     }
 );

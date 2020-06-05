@@ -15,13 +15,22 @@ export function getToken(val) {
     });
 }
 
-export function twoApi(val) {
+export function getMember(val) {
+    const token = window.localStorage.getItem('access_token');
     return request({
-        url: "", // 接口
-        method: "post", // 请求方式
+        url: "/auth/api/member", // 接口
+        method: "get", // 请求方式
         data: val, // 数据
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Authorization": 'Bearer '+token
         }
+    });
+}
+
+export function queryList(val) {
+    return request({
+        url: val.url, // 接口
+        method: "POST", // 请求方式
+        data: qs.stringify(val.params), // 数据
     });
 }

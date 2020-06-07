@@ -16,6 +16,7 @@
 </template>
 <script>
     import {getToken} from "../api/api";
+    import {Message} from "element-ui";
 
     export default {
         name: "Login",
@@ -53,7 +54,11 @@
 							window.localStorage.setItem('access_token', data.access_token);
                         	console.log(data)
                             this.$router.push('/main')
-                        });
+                        },(error)=> {
+                                // Do something with response error
+                                // 提示错误信息
+                                Message.error('账号或密码错误');
+                            });
                     }
                 });
             }

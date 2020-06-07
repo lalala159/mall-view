@@ -42,11 +42,6 @@
                     </el-dropdown>
                 </el-header>
                 <el-main>
-                    <el-breadcrumb separator="/" class="crumbs">
-                        <el-breadcrumb-item><router-link to="/sysUser">首页</router-link></el-breadcrumb-item>
-                        <el-breadcrumb-item>系统设置</el-breadcrumb-item>
-                        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
-                    </el-breadcrumb>
                     <div>
                         <router-view>
                         </router-view>

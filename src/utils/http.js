@@ -32,9 +32,6 @@ service.interceptors.response.use(
             return response.data;
     },
     (error)=> {
-        // Do something with response error
-        // 提示错误信息
-        Message.error('请求失败');
         return Promise.reject(error);
     }
 );

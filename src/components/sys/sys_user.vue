@@ -1,11 +1,40 @@
 <template>
+
     <div>
         <el-row :gutter="20">
+            <el-col :span="24">
+        <el-breadcrumb separator="/" class="crumbs">
+            <el-breadcrumb-item><router-link to="/sysUser">首页</router-link></el-breadcrumb-item>
+            <el-breadcrumb-item>系统设置</el-breadcrumb-item>
+            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        </el-breadcrumb>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :span="1">
+                <el-tag
+                        type='info'
+                        effect="dark">
+                    用户名:
+                </el-tag>
+            </el-col>
+            <el-col :span="3">
+                <el-input
+                        placeholder="请输入内容"
+                        v-model="input"
+                        clearable >
+                </el-input>
+            </el-col>
+            <el-col :span="1">
+            <el-button type="primary">查询</el-button>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20" style="margin-top: 20px;">
             <el-col>
                 <el-table
                         :data="tableData"
                         border
-                        style="width: 100%">
+                        style="width: 100%;height: 500px;">
                     <el-table-column
                             prop="memberName"
                             label="用户名称"
@@ -18,7 +47,8 @@
                     </el-table-column>
                     <el-table-column
                             prop="mobile"
-                            label="电话号码">
+                            label="电话号码"
+                            width="180">
                     </el-table-column>
                 </el-table>
             </el-col>
@@ -31,8 +61,8 @@
                         @current-change="handleCurrentChange"
                         :current-page="this.currentPage"
                         layout="sizes, prev, pager, next, total"
-                        :page-sizes="[1, 50, 100]"
-                        :page-size="1"
+                        :page-sizes="[20, 50, 100]"
+                        :page-size="20"
                         :total=this.total>
                 </el-pagination>
             </el-col>
@@ -49,9 +79,10 @@
             return {
                 tableData: [],
                 total: 0,
-                pageSize: 1,
+                pageSize: 20,
                 pageNum: 1,
-                currentPage: 1
+                currentPage: 1,
+                input: ''
             }
         },
         mounted() {
@@ -89,5 +120,7 @@
 </script>
 
 <style scoped>
-
+.el-row{
+ margin-bottom: 10px;
+}
 </style>

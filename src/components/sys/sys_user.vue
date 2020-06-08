@@ -21,12 +21,12 @@
             <el-col :span="3">
                 <el-input
                         placeholder="请输入内容"
-                        v-model="input"
+                        v-model="memberName"
                         clearable >
                 </el-input>
             </el-col>
             <el-col :span="1">
-            <el-button type="primary">查询</el-button>
+            <el-button type="primary" @click="loadDatas()">查询</el-button>
             </el-col>
         </el-row>
         <el-row :gutter="20" style="margin-top: 20px;">
@@ -36,20 +36,32 @@
                         border
                         style="width: 100%;height: 500px;">
                     <el-table-column
+                            prop="userName"
+                            label="账号"
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
                             prop="memberName"
-                            label="用户名称"
+                            label="员工名称"
                             width="180">
                     </el-table-column>
                     <el-table-column
                             prop="sex"
                             label="性别"
-                            width="180">
+                            width="180"
+                            :formatter="getSexName">
                     </el-table-column>
                     <el-table-column
                             prop="mobile"
                             label="电话号码"
                             width="180">
                     </el-table-column>
+                    <el-table-column
+                            prop="storeId"
+                            label="门店名称"
+                            width="180">
+                    </el-table-column>
+
                 </el-table>
             </el-col>
         </el-row>
@@ -82,13 +94,20 @@
                 pageSize: 20,
                 pageNum: 1,
                 currentPage: 1,
-                input: ''
+                memberName: ''
             }
         },
         mounted() {
             this.loadDatas()
         },
         methods: {
+            getSexName(row, column) {
+                if (row.sex === 1) {
+                    return '男'
+                } else  {
+                    return '女'
+                }
+            },
             handleSizeChange(val) {
                 this.pageSize = val;
                 this.loadDatas();
@@ -102,7 +121,7 @@
                 let params = {
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
-                    memberName: '',
+                    memberName: this.memberName,
                     mobile: ''
                 }
                 const val = {

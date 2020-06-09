@@ -5,7 +5,7 @@ import { Message } from 'element-ui';
 
 const service = axios.create({
 //   headers: {'X-Requested-With': 'XMLHttpRequest'}, // 可以配置headers
-    baseURL: "http://free.shenzhuo.vip:17089", // api的base_url
+    baseURL: "http://localhost:9527", // api的base_url
     timeout: 10000 // request timeout，默认0
 });
 // 请求头的设置

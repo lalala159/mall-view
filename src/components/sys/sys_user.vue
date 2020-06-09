@@ -139,7 +139,8 @@
 
 <script>
     import {queryList} from '~/api/api';
-
+    import {addUser} from '~/api/api';
+    import {Message} from "element-ui";
     export default {
         name: "sys_user",
         data() {
@@ -176,14 +177,10 @@
                     }],
                     mobile: [{
                         required: true,
-                        message: '电话号码不能为空',
-                        trigger: 'blur'
-                    },
-                        {
-                            validator: this.checkPhone,
-                            trigger: 'change'
-                        }
-                    ], storeId: [{
+                        trigger: 'blur',
+                        validator: this.checkPhone
+                    }],
+                    storeId: [{
                         required: true,
                         message: '请选择门店',
                         trigger: 'blur'
@@ -198,6 +195,8 @@
             checkPhone(rule, value, callback) {
                 if (!(/^1[34578]\d{9}$/.test(value))) {
                     callback(new Error('请输入正确的手机号码!'));
+                }else{
+                    callback();
                 }
             },
             getSexName(row, column) {
@@ -217,8 +216,28 @@
             },
             addUser(form) {
                 this.$refs[form].validate((valid) => {
-                    console.log(this.form);
-                    this.dialogFormVisible = false
+                    if(valid){
+                        let url = '/auth/sys/user/addUser';
+                        let params = this.form;
+                        const val = {
+                            url: url,
+                            params: params
+                        }
+                        addUser(val).then(data => {
+
+                            if(data.code==200){
+                                Message.success('新增成功');
+                                this.$refs[form].resetFields();
+                                this.dialogFormVisible = false;
+                                this.loadDatas();
+                            }
+                            if(data.code==888){
+                                Message.error('该账号已存在');
+                            }
+
+                        });
+
+                    }
                 })
             },
             loadDatas() {

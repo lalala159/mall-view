@@ -34,3 +34,11 @@ export function queryList(val) {
         data: qs.stringify(val.params), // 数据
     });
 }
+
+export function addUser(val) {
+    return request({
+        url: val.url, // 接口
+        method: "POST", // 请求方式
+        data: qs.stringify(val.params), // 数据
+    });
+}

@@ -1,3 +1,11 @@
+<style scoped>
+    router-link {
+        text-decoraction: none;
+    }
+    .router-link-active {
+        text-decoration: none;
+    }
+</style>
 <template>
     <div>
         <el-container class="main">
@@ -22,9 +30,9 @@
                                 <span slot="title">系统设置</span>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item index="1-1" ><router-link to="/sysUser">用户管理</router-link></el-menu-item>
-                                <el-menu-item index="1-2"><router-link to="/sysUser">角色管理</router-link></el-menu-item>
-                                <el-menu-item index="1-3"><router-link to="/sysUser">资源管理</router-link></el-menu-item>
+                                <router-link tag="li" to="/sysUser"><el-menu-item index="1-1">用户管理</el-menu-item></router-link>
+                                <router-link tag="li" to="/sysUser"><el-menu-item index="1-2">角色管理</el-menu-item></router-link>
+                                <router-link tag="li" to="/sysUser"><el-menu-item index="1-3">资源管理</el-menu-item></router-link>
                             </el-menu-item-group>
                         </el-submenu>
                     </el-menu>

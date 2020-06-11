@@ -1,3 +1,15 @@
+
+<style scoped>
+    .el-row {
+        margin-bottom: 10px;
+    }
+    a {
+        text-decoraction: none;
+    }
+    .router-link-active {
+        text-decoration: none;
+    }
+</style>
 <template>
 
     <div>
@@ -24,53 +36,9 @@
                 <el-button type="primary" @click="loadDatas()">查询</el-button>
             </el-col>
             <el-col :span="1" style="float: right;margin-right: 2%">
-                <el-button type="success" @click="dialogFormVisible = true">新增</el-button>
+                <router-link to="/addUser"><el-button type="success">新增</el-button></router-link>
             </el-col>
         </el-row>
-        <el-dialog title="新增" :visible.sync="dialogFormVisible">
-            <el-form ref="addForm" :model="form" :rules="rules">
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                        <el-form-item label="账号" :label-width="'80px'" prop="userName">
-                            <el-input v-model="form.userName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="员工姓名" :label-width="'80px'" prop="memberName">
-                            <el-input v-model="form.memberName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                        <el-form-item label="电话号码" :label-width="'80px'" prop="mobile">
-                            <el-input v-model="form.mobile"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="性别" :label-width="'80px'" prop="sex">
-                            <el-select v-model="form.sex">
-                                <el-option label="男" value="1"></el-option>
-                                <el-option label="女" value="2"></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                        <el-form-item label="所属门店" :label-width="'80px'" prop="storeId">
-                            <el-select v-model="form.storeId">
-                                <el-option label="总部" value="1"></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" v-on:click="addUser('addForm')">确 定</el-button>
-            </div>
-        </el-dialog>
         <el-row :gutter="20" style="margin-top: 20px;">
             <el-col>
                 <el-table
@@ -138,9 +106,7 @@
 </template>
 
 <script>
-    import {queryList} from '~/api/api';
-    import {addUser} from '~/api/api';
-    import {Message} from "element-ui";
+    import {queryList, getDelete} from '~/api/api';
     export default {
         name: "sys_user",
         data() {
@@ -150,55 +116,13 @@
                 pageSize: 20,
                 pageNum: 1,
                 currentPage: 1,
-                memberName: '',
-                dialogFormVisible: false,
-                form: {
-                    userName: '',
-                    memberName: '',
-                    mobile: '',
-                    storeId: '',
-                    sex: ''
-                },
-                rules: {
-                    userName: [{
-                        required: true,
-                        message: '账号不可为空',
-                        trigger: 'blur'
-                    }, {
-                        min: 3,
-                        max: 12,
-                        message: '账号长度在3到12',
-                        trigger: 'blur'
-                    }],
-                    memberName: [{
-                        required: true,
-                        message: '员工姓名不能为空',
-                        trigger: 'blur'
-                    }],
-                    mobile: [{
-                        required: true,
-                        trigger: 'blur',
-                        validator: this.checkPhone
-                    }],
-                    storeId: [{
-                        required: true,
-                        message: '请选择门店',
-                        trigger: 'blur'
-                    }]
-                }
+                memberName: ''
             }
         },
         mounted() {
             this.loadDatas()
         },
         methods: {
-            checkPhone(rule, value, callback) {
-                if (!(/^1[34578]\d{9}$/.test(value))) {
-                    callback(new Error('请输入正确的手机号码!'));
-                }else{
-                    callback();
-                }
-            },
             getSexName(row, column) {
                 if (row.sex === 1) {
                     return '男'
@@ -214,31 +138,17 @@
                 this.pageNum = val;
                 this.loadDatas();
             },
-            addUser(form) {
-                this.$refs[form].validate((valid) => {
-                    if(valid){
-                        let url = '/auth/sys/user/addUser';
-                        let params = this.form;
-                        const val = {
-                            url: url,
-                            params: params
-                        }
-                        addUser(val).then(data => {
-
-                            if(data.code==200){
-                                Message.success('新增成功');
-                                this.$refs[form].resetFields();
-                                this.dialogFormVisible = false;
-                                this.loadDatas();
-                            }
-                            if(data.code==888){
-                                Message.error('该账号已存在');
-                            }
-
-                        });
-
+            deleteUser(id){
+                const val = {
+                    url: '/auth/sys/user/deleteUser',
+                    params: {
+                        id:id
                     }
-                })
+                }
+                getDelete(val).then(data => {
+                    this.loadDatas();
+                    this.Message.success("删除成功");
+                });
             },
             loadDatas() {
                 let url = '/auth/sys/user/queryList';
@@ -261,9 +171,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .el-row {
-        margin-bottom: 10px;
-    }
-</style>

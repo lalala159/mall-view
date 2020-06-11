@@ -15,7 +15,7 @@
     </div>
 </template>
 <script>
-    import {getToken} from "../api/api";
+    import {getToken, requestGET} from "../api/api";
     import {Message} from "element-ui";
 
     export default {
@@ -51,14 +51,17 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         getToken(this.form).then(data => {
-							window.localStorage.setItem('access_token', data.access_token);
-                        	console.log(data)
-                            this.$router.push('/main')
-                        },(error)=> {
-                                // Do something with response error
-                                // 提示错误信息
-                                Message.error('账号或密码错误');
+                            window.localStorage.setItem('access_token', data.access_token);
+                            let url = '/auth/sys/permission/getUserInfo?userName=' + this.form.username;
+                            requestGET(url).then(data => {
+                                console.log(data);
                             });
+                            this.$router.push('/main')
+                        }, (error) => {
+                            // Do something with response error
+                            // 提示错误信息
+                            Message.error('账号或密码错误');
+                        });
                     }
                 });
             }

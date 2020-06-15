@@ -52,10 +52,7 @@
                     if (valid) {
                         getToken(this.form).then(data => {
                             window.localStorage.setItem('access_token', data.access_token);
-                            let url = '/auth/sys/permission/getUserInfo?userName=' + this.form.username;
-                            requestGET(url).then(data => {
-                                console.log(data);
-                            });
+                            window.localStorage.setItem('username', this.form.username);
                             this.$router.push('/main')
                         }, (error) => {
                             // Do something with response error

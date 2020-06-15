@@ -2,6 +2,7 @@
     router-link {
         text-decoraction: none;
     }
+
     .router-link-active {
         text-decoration: none;
     }
@@ -24,15 +25,15 @@
                              text-color="#fff"
                              active-text-color="#ffd04b"
                     >
-                        <el-submenu index="1">
+                        <el-submenu :index="item.key" v-for="(item,index) in menuList">
                             <template slot="title">
-                                <i class="el-icon-setting"></i>
-                                <span slot="title">系统设置</span>
+                                <i :class="item.icon"></i>
+                                <span slot="title">{{item.title}}</span>
                             </template>
                             <el-menu-item-group>
-                                <router-link tag="li" to="/sysUser"><el-menu-item index="1-1">用户管理</el-menu-item></router-link>
-                                <router-link tag="li" to="/sysUser"><el-menu-item index="1-2">角色管理</el-menu-item></router-link>
-                                <router-link tag="li" to="/sysUser"><el-menu-item index="1-3">资源管理</el-menu-item></router-link>
+                                <router-link tag="li" v-for="child in item.children" :to="child.path">
+                                    <el-menu-item :index="child.key" v-if="!child.hidden">{{child.title}}</el-menu-item>
+                                </router-link>
                             </el-menu-item-group>
                         </el-submenu>
                     </el-menu>
@@ -51,14 +52,14 @@
                 </el-header>
                 <el-main>
                     <div>
-                        <router-view>
-                        </router-view>
+                        <router-view></router-view>
                     </div>
                 </el-main>
             </el-container>
         </el-container>
     </div>
 </template>
+
 <style>
     * {
         padding: 0;
@@ -143,18 +144,21 @@
 </style>
 
 <script>
-
+    import {requestGET} from "../api/api";
     export default {
         data() {
             return {
                 isCollapse: false,
                 tabWidth: 200,
                 test1: 1,
-                intelval: null
+                intelval: null,
+                menuList: [],
+
 
             };
         },
         mounted() {
+            this.getMenuTree()
         },
         methods: {
             handleOpen(key, keyPath) {
@@ -163,7 +167,20 @@
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
-
+            getMenuTree() {
+                let username = localStorage.getItem('username');
+                let menu = JSON.parse(localStorage.getItem('menu'));
+                if (menu) {
+                    console.log(menu);
+                    this.menuList = menu;
+                } else {
+                    let url = '/auth/sys/permission/getMenuList?userName=' + username;
+                    requestGET(url).then(data => {
+                        localStorage.setItem('menu', JSON.stringify(data.data));
+                        this.menuList = data.data;
+                    });
+                }
+            },
             isClossTabFun() {
                 clearInterval(this.intelval);
                 if (!this.isCollapse) {

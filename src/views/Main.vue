@@ -43,10 +43,10 @@
                 <el-header class="main-header">
                     <el-dropdown>
                         <span class="el-dropdown-link">
-                            <img src="../assets/photo/hid.jpg"/>
+                            <img src="../assets/photo/title.jpg"/>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item>退出登录</el-dropdown-item>
+                            <el-dropdown-item><a v-on:click="logout()">退出登录</a></el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </el-header>
@@ -144,7 +144,8 @@
 </style>
 
 <script>
-    import {requestGET} from "../api/api";
+    import {getDelete, requestGET} from "../api/api";
+    import {Message} from "element-ui";
     export default {
         data() {
             return {
@@ -193,6 +194,15 @@
                     this.tabWidth = 200;
                 }
                 this.isCollapse = !this.isCollapse;
+            },
+            logout(){
+                const val = {
+                    url: '/auth/sys/user/exit'
+                }
+                getDelete(val).then(data => {
+                    localStorage.clear();
+                    this.$router.push('/login')
+                });
             }
         }
     }

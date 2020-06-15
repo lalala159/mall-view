@@ -6,6 +6,8 @@ import Main from '../views/Main'
 import SysUser from '../components/sys/sys_user'
 import addUser from '../components/sys/user_edit'
 import NOTFOUND from '../views/exception/404'
+import sysPermission from '../views/sys/sys_permission'
+import sysRole from '../views/sys/sys_role'
 
 Vue.use(Router);
 
@@ -44,6 +46,16 @@ export default new Router({
           path: '/addUser',
           name: 'addUser',
           component: addUser
+        },
+        {
+          path: '/sysPermission',
+          name: 'sysPermission',
+          component: sysPermission
+        },
+        {
+          path: '/sysRole',
+          name: 'sysRole',
+          component: sysRole
         }
       ]
     }

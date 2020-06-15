@@ -20,22 +20,12 @@
                         <router-link to="/main">首页</router-link>
                     </el-breadcrumb-item>
                     <el-breadcrumb-item>系统设置</el-breadcrumb-item>
-                    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+                    <el-breadcrumb-item>角色管理</el-breadcrumb-item>
                 </el-breadcrumb>
             </el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row :gutter="20">
-            <el-col :span="4">
-                <el-input
-                        placeholder="员工名称"
-                        v-model="memberName"
-                        clearable>
-                </el-input>
-            </el-col>
-            <el-col :span="1">
-                <el-button type="primary" @click="loadDatas()">查询</el-button>
-            </el-col>
             <el-col :span="1" style="float: right;margin-right: 2%">
                 <router-link to="/addUser"><el-button type="success">新增</el-button></router-link>
             </el-col>
@@ -47,41 +37,21 @@
                         border
                         style="width: 100%;height: 500px;">
                     <el-table-column
-                            prop="userName"
-                            label="账号"
+                            prop="roleName"
+                            label="角色名称"
                             width="180">
                     </el-table-column>
                     <el-table-column
-                            prop="memberName"
-                            label="员工名称"
-                            width="180">
-                    </el-table-column>
-                    <el-table-column
-                            prop="sex"
-                            label="性别"
+                            prop="valid"
+                            label="是否有效"
                             width="180"
-                            :formatter="getSexName">
-                    </el-table-column>
-                    <el-table-column
-                            prop="mobile"
-                            label="电话号码"
-                            width="180">
-                    </el-table-column>
-                    <el-table-column
-                            prop="storeName"
-                            label="门店名称"
-                            width="180">
+                            :formatter="getValid">
                     </el-table-column>
                     <el-table-column
                             label="操作"
-                            width="400">
+                            width="300">
                         <template slot-scope="scope">
-                            　　　　　　
-                            <el-button type="text" @click="checkDetail(scope.row.id)">查看详情</el-button>
-                            　　　　　　
-                            <el-button type="info" @click="modifyUser(scope.row.id)">修改</el-button>
-                            <el-button type="info" @click="deleteUser(scope.row.id)">分配权限</el-button>
-                            　　　　　　
+                            <el-button type="info" @click="deleteUser(scope.row.id)">分配权限</el-button>　　　　　　
                             <el-button type="info" @click="deleteUser(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -107,9 +77,9 @@
 </template>
 
 <script>
-    import {queryList, getDelete} from '~/api/api';
+    import {requestGET, getDelete} from '~/api/api';
     export default {
-        name: "sys_user",
+        name: "sys_role",
         data() {
             return {
                 tableData: [],
@@ -124,11 +94,11 @@
             this.loadDatas()
         },
         methods: {
-            getSexName(row, column) {
-                if (row.sex === 1) {
-                    return '男'
+            getValid(row, column) {
+                if (row.valid === 1) {
+                    return '有效'
                 } else {
-                    return '女'
+                    return '无效'
                 }
             },
             handleSizeChange(val) {
@@ -154,18 +124,8 @@
                 });
             },
             loadDatas() {
-                let url = '/auth/sys/user/queryList';
-                let params = {
-                    pageNum: this.pageNum,
-                    pageSize: this.pageSize,
-                    memberName: this.memberName,
-                    mobile: ''
-                }
-                const val = {
-                    url: url,
-                    params: params
-                }
-                queryList(val).then(data => {
+                let url = '/auth/sys/role/queryList?pageNum='+this.pageNum+'&pageSize='+this.pageSize;
+                requestGET(url).then(data => {
                     this.tableData = data.list;
                     this.total = data.total;
                     this.currentPage = this.pageNum;

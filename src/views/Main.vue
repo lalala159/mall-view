@@ -172,7 +172,6 @@
                 let username = localStorage.getItem('username');
                 let menu = JSON.parse(localStorage.getItem('menu'));
                 if (menu) {
-                    console.log(menu);
                     this.menuList = menu;
                 } else {
                     let url = '/auth/sys/permission/getMenuList?userName=' + username;

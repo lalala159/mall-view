@@ -42,10 +42,10 @@
                             width="180">
                     </el-table-column>
                     <el-table-column
-                            prop="valid"
+                            prop="valida"
                             label="是否有效"
                             width="180"
-                            :formatter="getValid">
+                            :formatter="getValids">
                     </el-table-column>
                     <el-table-column
                             label="操作"
@@ -94,11 +94,12 @@
             this.loadDatas()
         },
         methods: {
-            getValid(row, column) {
-                if (row.valid === 1) {
-                    return '有效'
-                } else {
-                    return '无效'
+            getValids(row, column) {
+                console.log(row.valida);
+                if (row.valida) {
+                    return '有效';
+                } else{
+                    return '无效';
                 }
             },
             handleSizeChange(val) {

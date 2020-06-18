@@ -28,7 +28,7 @@ new Vue({
 
 router.beforeEach((to, from, next) => {
     if (to.path.startsWith('/login')) {
-        window.localStorage.removeItem('access_token');    
+        localStorage.clear();
         next()
     } else {
         let user = window.localStorage.getItem('access_token');

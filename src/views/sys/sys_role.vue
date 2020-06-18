@@ -1,13 +1,22 @@
-
 <style scoped>
     .el-row {
         margin-bottom: 10px;
     }
+
     a {
         text-decoraction: none;
     }
+
     .router-link-active {
         text-decoration: none;
+    }
+    .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        padding-right: 8px;
     }
 </style>
 <template>
@@ -26,8 +35,10 @@
         </el-row>
         <el-divider></el-divider>
         <el-row :gutter="20">
-            <el-col :span="1" style="float: right;margin-right: 2%">
-                <router-link to="/addUser"><el-button type="success">新增</el-button></router-link>
+            <el-col :span="1" style="float: right;margin-right: 3%">
+                <router-link to="/addUser">
+                    <el-button type="success">新增</el-button>
+                </router-link>
             </el-col>
         </el-row>
         <el-row :gutter="20" style="margin-top: 20px;">
@@ -51,7 +62,8 @@
                             label="操作"
                             width="300">
                         <template slot-scope="scope">
-                            <el-button type="info" @click="deleteUser(scope.row.id)">分配权限</el-button>　　　　　　
+                            <el-button type="info" @click="addMenu(scope.row.id)">分配权限</el-button>
+                            　　　　　　
                             <el-button type="info" @click="deleteUser(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -73,11 +85,31 @@
                 </el-pagination>
             </el-col>
         </el-row>
+
+        <el-dialog
+                title="权限菜单"
+                :visible.sync="dialogVisible"
+                width="20%">
+            <el-tree
+                    :data="menuList"
+                    show-checkbox
+                    node-key="id"
+                    default-expand-all
+                    ref="tree"
+                    highlight-current
+                    :expand-on-click-node="false">
+            </el-tree>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="getCheckedKeys()">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-    import {requestGET, getDelete} from '~/api/api';
+    import {requestGET, getDelete, requestPost} from '~/api/api';
+    import {Message} from "element-ui";
     export default {
         name: "sys_role",
         data() {
@@ -87,7 +119,10 @@
                 pageSize: 20,
                 pageNum: 1,
                 currentPage: 1,
-                memberName: ''
+                memberName: '',
+                dialogVisible: false,
+                menuList: [],
+                roleId:0
             }
         },
         mounted() {
@@ -97,9 +132,24 @@
             getValids(row, column) {
                 if (row.valid) {
                     return '有效';
-                } else{
+                } else {
                     return '无效';
                 }
+            },
+            getCheckedKeys() {
+                let url = '/auth/sys/role/addMenu';
+                let params =  {
+                        menuIds: this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys()).join(','),
+                        roleId: this.roleId
+                    }
+                requestPost(url, params).then(data => {
+                    if(data.code == 200){
+                        Message.success(data.message);
+                    }else{
+                        Message.error(data.message);
+                    }
+                });
+                console.log();
             },
             handleSizeChange(val) {
                 this.pageSize = val;
@@ -109,7 +159,16 @@
                 this.pageNum = val;
                 this.loadDatas();
             },
-            deleteUser(id){
+            addMenu(id) {
+                this.roleId = id;
+                let username = localStorage.getItem('username');
+                let url = '/auth/sys/permission/getMenu?userName=' + username;
+                requestGET(url).then(data => {
+                    this.menuList = data.data;
+                });
+                this.dialogVisible = true;
+            },
+            deleteUser(id) {
                 this.$confirm('确认删除？').then(_ => {
                     const val = {
                         url: '/auth/sys/user/deleteUser',
@@ -124,7 +183,7 @@
                 });
             },
             loadDatas() {
-                let url = '/auth/sys/role/queryList?pageNum='+this.pageNum+'&pageSize='+this.pageSize;
+                let url = '/auth/sys/role/queryList?pageNum=' + this.pageNum + '&pageSize=' + this.pageSize;
                 requestGET(url).then(data => {
                     this.tableData = data.list;
                     this.total = data.total;

@@ -36,7 +36,7 @@
         <el-divider></el-divider>
         <el-row :gutter="20">
             <el-col :span="1" style="float: right;margin-right: 3%">
-                <router-link to="/addUser">
+                <router-link to="/addRole">
                     <el-button type="success">新增</el-button>
                 </router-link>
             </el-col>
@@ -47,6 +47,11 @@
                         :data="tableData"
                         border
                         style="width: 100%;height: 500px;">
+                    <el-table-column
+                            prop="roleCode"
+                            label="角色编码"
+                            width="180">
+                    </el-table-column>
                     <el-table-column
                             prop="roleName"
                             label="角色名称"
@@ -63,8 +68,7 @@
                             width="300">
                         <template slot-scope="scope">
                             <el-button type="info" @click="addMenu(scope.row.id)">分配权限</el-button>
-                            　　　　　　
-                            <el-button type="info" @click="deleteUser(scope.row.id)">删除</el-button>
+                            <el-button type="info" @click="deleteRole(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
 
@@ -95,6 +99,7 @@
                     show-checkbox
                     node-key="id"
                     default-expand-all
+                    :default-checked-keys="checkMenu"
                     ref="tree"
                     highlight-current
                     :expand-on-click-node="false">
@@ -122,6 +127,7 @@
                 memberName: '',
                 dialogVisible: false,
                 menuList: [],
+                checkMenu:[],
                 roleId:0
             }
         },
@@ -160,18 +166,24 @@
                 this.loadDatas();
             },
             addMenu(id) {
+                this.checkMenu = [];
                 this.roleId = id;
                 let username = localStorage.getItem('username');
                 let url = '/auth/sys/permission/getMenu?userName=' + username;
                 requestGET(url).then(data => {
                     this.menuList = data.data;
+                    let urlC = '/auth/sys/role/getPermissioned?roleId=' + this.roleId;
+                    requestGET(urlC).then(data => {
+                        this.checkMenu = data.data;
+                        console.log(this.checkMenu);
+                    });
                 });
                 this.dialogVisible = true;
             },
-            deleteUser(id) {
+            deleteRole(id) {
                 this.$confirm('确认删除？').then(_ => {
                     const val = {
-                        url: '/auth/sys/user/deleteUser',
+                        url: '/auth/sys/role/deleteRole',
                         params: {
                             id: id
                         }

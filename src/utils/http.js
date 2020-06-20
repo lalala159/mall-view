@@ -63,10 +63,20 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response)=> {
             tryHideFullScreenLoading()
-            return response.data;
+        let code = response.data.code;
+            if(response.status == 200){
+                if(code == 500){
+                    Message.error(response.data.message);
+                }
+                return response.data;
+            }
+            if(response.status == 503){
+                Message.error("服务正在启动请稍等！");
+            }
     },
     (error)=> {
         tryHideFullScreenLoading()
+        Message.error("服务正在启动请稍等！");
         return Promise.reject(error);
     }
 );

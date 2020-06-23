@@ -76,7 +76,7 @@ export function requestPost(url, params) {
 }
 
 // get请求
-export function requestGET(url, params) {
+export function requestGET(url) {
     return request({
         url: url, // 接口
         method: 'GET' // 请求方式

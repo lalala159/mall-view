@@ -76,7 +76,7 @@ service.interceptors.response.use(
     },
     (error)=> {
         tryHideFullScreenLoading()
-        Message.error("服务正在启动请稍等！");
+        Message.error("服务错误!请稍等！");
         return Promise.reject(error);
     }
 );

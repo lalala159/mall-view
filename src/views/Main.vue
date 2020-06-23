@@ -195,8 +195,12 @@
                 this.isCollapse = !this.isCollapse;
             },
             logout(){
+                let token = window.localStorage.getItem('access_token');
                 const val = {
-                    url: '/auth/sys/user/exit'
+                    url: '/auth/sys/user/exit',
+                    params : {
+                        access_token : token
+                    }
                 }
                 getDelete(val).then(data => {
                     localStorage.clear();

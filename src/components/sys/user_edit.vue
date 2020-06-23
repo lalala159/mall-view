@@ -1,69 +1,99 @@
 <template>
     <div>
-    <el-row :gutter="20">
-        <el-col :span="24">
-            <el-breadcrumb separator="/" class="crumbs">
-                <el-breadcrumb-item>
-                    <router-link to="/main">首页</router-link>
-                </el-breadcrumb-item>
-                <el-breadcrumb-item>系统设置</el-breadcrumb-item>
-                <el-breadcrumb-item>
-                    <router-link to="/sysUser">用户管理</router-link>
-                </el-breadcrumb-item>
-                <el-breadcrumb-item>新增</el-breadcrumb-item>
-            </el-breadcrumb>
-        </el-col>
-    </el-row>
-        <el-divider></el-divider>
-    <el-form ref="addForm" :model="form" :rules="rules">
-        <el-row :gutter="20">
-            <el-col :span="6">
-                <el-form-item label="账号:" :label-width="'100px'" prop="userName">
-                    <el-input v-model="form.userName"></el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="6">
-                <el-form-item label="员工姓名:" :label-width="'100px'" prop="memberName">
-                    <el-input v-model="form.memberName"></el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="6">
-                <el-form-item label="电话号码:" :label-width="'100px'" prop="mobile">
-                    <el-input v-model="form.mobile"></el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20">
-            <el-col :span="6">
-                <el-form-item label="性别:" :label-width="'100px'" prop="sex">
-                    <el-select value="1" >
-                        <el-option v-for="item in sex" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row :gutter="20">
+        <el-row :gutter="24">
             <el-col :span="12">
-                <el-form-item label="所属门店:" :label-width="'100px'" prop="storeId">
-                    <el-select v-model="form.storeId">
-                        <el-option label="总部" value="1"></el-option>
-                    </el-select>
-                </el-form-item>
+                <el-breadcrumb separator="/" class="crumbs">
+                    <el-breadcrumb-item>
+                        <router-link to="/main">首页</router-link>
+                    </el-breadcrumb-item>
+                    <el-breadcrumb-item>系统设置</el-breadcrumb-item>
+                    <el-breadcrumb-item>
+                        <router-link to="/sysUser">用户管理</router-link>
+                    </el-breadcrumb-item>
+                    <el-breadcrumb-item>新增</el-breadcrumb-item>
+                </el-breadcrumb>
             </el-col>
         </el-row>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-        <el-button type="primary" v-on:click="addUser('addForm')">确 定</el-button>
-    </div>
+        <el-divider></el-divider>
+        <el-row :gutter="24">
+            <el-col :span="10">
+                <el-form ref="addForm" :model="form" :rules="rules">
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-form-item label="账号:" :label-width="'100px'" prop="userName">
+                                <el-input v-model="form.userName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-form-item label="员工姓名:" :label-width="'100px'" prop="memberName">
+                                <el-input v-model="form.memberName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-form-item label="电话号码:" :label-width="'100px'" prop="mobile">
+                                <el-input v-model="form.mobile"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-form-item label="性别:" :label-width="'100px'" prop="sex">
+                                <el-select value="1">
+                                    <el-option v-for="item in sex" :label="item.label" :value="item.value"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-form-item label="所属门店:" :label-width="'100px'" prop="storeId">
+                                <el-select v-model="form.storeId">
+                                    <el-option label="总部" value="1"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="18">
+                            <el-form-item label="角色:" :label-width="'100px'" prop="roleId">
+                                <el-checkbox-group v-model="checkedRoles">
+                                    <el-checkbox v-for="role in roles" :label="role.id" :key="role.id">
+                                        {{role.roleName}}
+                                    </el-checkbox>
+                                </el-checkbox-group>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-col>
+            <el-col :span="14">
+                <el-row v-for="menu in menus">
+                    <el-col :span="4">
+                        <span style="float: left">{{menu.title}}:</span>
+                    </el-col>
+                    <el-col :span="20">
+                        <el-checkbox-group v-model="checkedMenus">
+                            <el-checkbox v-for="child in menu.children" :label="child.id" :key="child.id" disabled>
+                                {{child.title}}
+                            </el-checkbox>
+                        </el-checkbox-group>
+                        <el-divider></el-divider>
+                    </el-col>
+                </el-row>
+            </el-col>
+        </el-row>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="primary" v-on:click="addUser('addForm')">确 定</el-button>
+        </div>
     </div>
 </template>
 
 <script>
-    import {addUser} from "~/api/api";
+    import {addUser, requestGET} from "~/api/api";
     import {Message} from "element-ui";
 
     export default {
@@ -71,6 +101,10 @@
         data() {
             return {
                 dialogFormVisible: false,
+                roles: [],
+                checkedRoles: [],
+                menus: [],
+                checkedMenus: [],
                 sex: [{
                     value: '1',
                     label: '男'
@@ -113,10 +147,26 @@
                     }]
                 }
             }
-            },
+        },
         mounted() {
+            this.loadRole();
+            this.loadMenu();
         },
         methods: {
+            loadRole() {
+                let username = localStorage.getItem('username');
+                let url = '/auth/sys/role/getRole?userName=' + username;
+                requestGET(url).then(data => {
+                    this.roles = data.data;
+                })
+            },
+            loadMenu() {
+                let username = localStorage.getItem('username');
+                let url = '/auth/sys/permission/getMenuList?userName=' + username;
+                requestGET(url).then(data => {
+                    this.menus = data.data;
+                })
+            },
             addUser(form) {
                 this.$refs[form].validate((valid) => {
                     if (valid) {

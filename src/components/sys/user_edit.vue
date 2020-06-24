@@ -42,7 +42,7 @@
                     <el-row :gutter="20">
                         <el-col :span="18">
                             <el-form-item label="性别:" :label-width="'100px'" prop="sex">
-                                <el-select value="1">
+                                <el-select v-model="form.sex">
                                     <el-option v-for="item in sex" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
                             </el-form-item>
@@ -60,7 +60,7 @@
                     <el-row :gutter="20">
                         <el-col :span="18">
                             <el-form-item label="角色:" :label-width="'100px'" prop="roleId">
-                                <el-checkbox-group v-model="checkedRoles">
+                                <el-checkbox-group v-model="form.roleId"  @change="checkItem">
                                     <el-checkbox v-for="role in roles" :label="role.id" :key="role.id">
                                         {{role.roleName}}
                                     </el-checkbox>
@@ -102,7 +102,6 @@
             return {
                 dialogFormVisible: false,
                 roles: [],
-                checkedRoles: [],
                 menus: [],
                 checkedMenus: [],
                 sex: [{
@@ -117,7 +116,8 @@
                     memberName: '',
                     mobile: '',
                     storeId: '',
-                    sex: ''
+                    sex: '',
+                    roleId:[]
                 },
                 rules: {
                     userName: [{
@@ -160,6 +160,13 @@
                     this.roles = data.data;
                 })
             },
+            checkItem(value){
+                let roleIds = value.join(',');
+                let url = '/auth/sys/role/getPermissionIds?roleIds=' + roleIds;
+                requestGET(url).then(data => {
+                    this.checkedMenus = data.data;
+                })
+            },
             loadMenu() {
                 let username = localStorage.getItem('username');
                 let url = '/auth/sys/permission/getMenuList?userName=' + username;
@@ -168,9 +175,11 @@
                 })
             },
             addUser(form) {
+                console.log(this.form);
                 this.$refs[form].validate((valid) => {
                     if (valid) {
                         let url = '/auth/sys/user/addUser';
+                        this.form.roleIds = this.form.roleId.join(',');
                         let params = this.form;
                         const val = {
                             url: url,

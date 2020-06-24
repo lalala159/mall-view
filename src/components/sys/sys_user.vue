@@ -127,9 +127,10 @@
             getSexName(row, column) {
                 if (row.sex === 1) {
                     return '男'
-                } else {
+                }  if (row.sex === 2) {
                     return '女'
                 }
+                return ''
             },
             handleSizeChange(val) {
                 this.pageSize = val;

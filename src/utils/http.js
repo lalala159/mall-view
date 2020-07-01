@@ -7,7 +7,7 @@ import { Loading } from 'element-ui';
 
 const service = axios.create({
 //   headers: {'X-Requested-With': 'XMLHttpRequest'}, // 可以配置headers
-    baseURL: "http://localhost:9527", // api的base_url
+    baseURL: "http://mall.gateway.com:9527", // api的base_url
     timeout: 10000 // request timeout，默认0
 });
 

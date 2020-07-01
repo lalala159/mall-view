@@ -47,6 +47,14 @@ module.exports = (options = {}) => ({
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest']
     }),
+    new webpack.LoaderOptionsPlugin({
+      options:{
+        babel:{
+          babelrc: false,
+          "presets": ["es2015"]
+        }
+      }
+    }),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     })

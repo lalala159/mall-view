@@ -76,10 +76,6 @@
                             label="操作"
                             width="400">
                         <template slot-scope="scope">
-                            　　　　　　
-                            <el-button type="text" @click="checkDetail(scope.row.id)">查看详情</el-button>
-                            　　　　　　
-                            <el-button type="info" @click="modifyUser(scope.row.id)">修改</el-button>
                             <el-button type="info" @click="deleteUser(scope.row.id)">分配权限</el-button>
                             　　　　　　
                             <el-button type="info" @click="deleteUser(scope.row.id)">删除</el-button>

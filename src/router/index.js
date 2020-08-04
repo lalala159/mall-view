@@ -10,6 +10,7 @@ import sysPermission from '../views/sys/sys_permission'
 import sysRole from '../views/sys/sys_role'
 import addRole from '../views/sys/role_edit'
 import splx from '../views/sp/splx'
+import sysZd from '../views/zd/sys_zd'
 
 Vue.use(Router);
 
@@ -68,6 +69,11 @@ export default new Router({
           path: '/addRole',
           name: 'addRole',
           component: addRole
+        },
+        {
+          path: '/sysZd',
+          name: 'sysZd',
+          component: sysZd
         }
       ]
     },

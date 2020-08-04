@@ -6,8 +6,8 @@
                     <el-breadcrumb-item>
                         <router-link to="/main">首页</router-link>
                     </el-breadcrumb-item>
-                    <el-breadcrumb-item>基础信息</el-breadcrumb-item>
-                    <el-breadcrumb-item>商品类型</el-breadcrumb-item>
+                    <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+                    <el-breadcrumb-item>字典管理</el-breadcrumb-item>
                 </el-breadcrumb>
             </el-col>
         </el-row>
@@ -53,8 +53,20 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="类型名称:" :label-width="'100px'" prop="lxMc">
-                            <el-input v-model="form.lxMc"></el-input>
+                        <el-form-item label="字典名称:" :label-width="'100px'" prop="zdmc">
+                            <el-input v-model="form.zdmc"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="字典CODE:" :label-width="'100px'" prop="zdCode">
+                            <el-input v-model="form.zdCode" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="排序:" :label-width="'100px'" prop="sort">
+                            <el-input v-model="form.sort" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -69,27 +81,28 @@
 <script>
     import {requestGET, requestPost, getDelete} from "~/api/api";
     import {Message} from "element-ui";
+    let id = 1000;
     export default {
-        name: "splx",
+        name: "sys_zd",
         methods: {
             getList() {
-                let url = '/info/sp/lx/queryList';
+                let url = '/info/mallZidian/list';
                 requestGET(url).then(data => {
                     this.splxList[0].children = data.data;
                 });
             }, openContext(data){
                 this.form.parentName = data.label;
-                this.form.parentId = data.id;
+                this.form.pId = data.id;
                 this.dialogVisible = true;
             }, edit(data){
-                this.form.lxMc = data.label;
+                this.form.zdmc = data.label;
                 this.form.id = data.id;
                 this.dialogVisible = true;
             },addPermission(form) {
                 if(this.form.id==''){
                     this.$refs[form].validate((valid) => {
                         if (valid) {
-                            let url = '/info/sp/lx/add';
+                            let url = '/info/mallZidian/insert';
                             let params = this.form;
                             requestPost(url, params).then(data => {
                                 if (data.code == 200) {
@@ -121,9 +134,10 @@
             resetProp(){
                 this.form = {
                     parentName: '',
-                        lxMc: '',
-                        parentId: '',
-                        id : ''
+                    zdmc: '',
+                    pId: '',
+                    id : '',
+                    sort:''
                 };
                 console.log(this.form)
             },
@@ -163,14 +177,16 @@
                 },
                 form: {
                     parentName: '',
-                    lxMc: '',
-                    parentId: '',
-                    id : ''
+                    zdmc: '',
+                    pId: '',
+                    id : '',
+                    sort:'',
+                    zdCode:''
                 },
                 rules: {
-                    lxMc: [{
+                    zdmc: [{
                         required: true,
-                        message: '类型名称不能为空',
+                        message: '字典名称不能为空',
                         trigger: 'blur'
                     }, {
                         max: 12,
